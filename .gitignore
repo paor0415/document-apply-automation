@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+
+# 実行時に自動生成されるログ・スクリーンショット
+logs/
+
+# 動作確認(--demo)実行時に自動生成されるサンプル添付ファイル
+sample_attachment.txt
+
+# 仮想環境
+.venv/
+venv/
