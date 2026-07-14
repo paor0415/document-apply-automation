@@ -1,0 +1,15 @@
+# 書類申請自動化ツール 依存ライブラリ
+#
+# インストール手順:
+#   conda activate notebooklm
+#   pip install -r requirements.txt
+#   python -m playwright install chromium   # ← ブラウザ本体。これを忘れると起動に失敗する
+
+# ブラウザ自動操作。CDP接続(connect_over_cdp)もこのパッケージに含まれる。
+playwright>=1.40.0
+
+# UI(Tkinter)、ローカルサーバー(http.server)、ログ(logging)はすべてPython標準ライブラリのため
+# 追加インストールは不要。
+#
+# ※ Tkinterは標準ライブラリだが、Linux環境では別途 python3-tk の導入が必要な場合がある。
+#    macOS/Windows の公式Python・Anaconda環境には最初から含まれている。

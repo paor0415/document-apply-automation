@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OOO社内ポータル（ダミー）</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+      margin: 0; background: #eef2f6; color: #1f2933;
+    }
+    header {
+      background: #1e3a5f; color: #fff; padding: 18px 28px;
+      display: flex; align-items: baseline; gap: 14px;
+    }
+    header h1 { margin: 0; font-size: 20px; letter-spacing: .04em; }
+    header .badge {
+      font-size: 11px; background: #d97706; padding: 3px 8px; border-radius: 3px;
+    }
+    .wrap { max-width: 860px; margin: 28px auto; padding: 0 20px; }
+    .card {
+      background: #fff; border-radius: 8px; padding: 24px 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.1); margin-bottom: 20px;
+    }
+    h2 { font-size: 15px; margin: 0 0 16px; padding-bottom: 10px;
+         border-bottom: 2px solid #1e3a5f; color: #1e3a5f; }
+    ul.menu { list-style: none; padding: 0; margin: 0; }
+    ul.menu li { border-bottom: 1px solid #edf0f3; }
+    ul.menu li:last-child { border-bottom: none; }
+    ul.menu a {
+      display: block; padding: 13px 8px; color: #1f5faa;
+      text-decoration: none; font-size: 14px;
+    }
+    ul.menu a:hover { background: #f5f8fb; text-decoration: underline; }
+    ul.menu a::before { content: "▸ "; color: #94a3b8; }
+    .highlight a { font-weight: 600; }
+    .note {
+      font-size: 12px; color: #64748b; background: #fffbeb;
+      border-left: 3px solid #d97706; padding: 10px 14px; line-height: 1.7;
+    }
+    footer { text-align: center; font-size: 11px; color: #94a3b8; padding: 20px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OOO社内ポータル</h1>
+    <span class="badge">DUMMY / 動作確認用</span>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <h2>各種手続き</h2>
+      <ul class="menu">
+        <!-- ダミーのリンク。実サイトでは目的のリンクがこうした一覧の中に紛れている想定。 -->
+        <li><a href="#" id="link-attendance">勤怠管理システム</a></li>
+        <li><a href="#" id="link-expense">経費精算システム</a></li>
+
+        <!-- ★ 自動化の対象リンク。
+             browser_controller.click_link_to_apply() がこの要素をクリックする。
+             config.py の PortalSelectors.apply_link = "#link-to-apply" と対応。 -->
+        <li class="highlight"><a href="apply.html" id="link-to-apply">書類申請システム</a></li>
+
+        <li><a href="#" id="link-facility">設備予約システム</a></li>
+        <li><a href="#" id="link-directory">社員名簿</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>お知らせ</h2>
+      <p class="note">
+        これはPlaywright自動化フローの動作確認用ダミーページです。実際の社内ポータルではありません。<br>
+        「書類申請システム」のリンクが、自動化フローのクリック対象になっています。
+      </p>
+    </div>
+  </div>
+
+  <footer>OOO Corporation — Internal Portal (Dummy)</footer>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>書類申請フォーム（ダミー）</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+      margin: 0; background: #eef2f6; color: #1f2933;
+    }
+    header {
+      background: #14532d; color: #fff; padding: 18px 28px;
+      display: flex; align-items: baseline; gap: 14px;
+    }
+    header h1 { margin: 0; font-size: 20px; letter-spacing: .04em; }
+    header .badge {
+      font-size: 11px; background: #d97706; padding: 3px 8px; border-radius: 3px;
+    }
+    .wrap { max-width: 720px; margin: 28px auto; padding: 0 20px; }
+    .card {
+      background: #fff; border-radius: 8px; padding: 28px 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+    h2 { font-size: 15px; margin: 0 0 22px; padding-bottom: 10px;
+         border-bottom: 2px solid #14532d; color: #14532d; }
+    .field { margin-bottom: 20px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .req { color: #dc2626; font-size: 11px; margin-left: 5px; }
+    input[type=text], input[type=date], select, textarea {
+      width: 100%; padding: 9px 11px; font-size: 14px; font-family: inherit;
+      border: 1px solid #cbd5e1; border-radius: 4px; background: #fff;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid #14532d; outline-offset: -1px; border-color: #14532d;
+    }
+    textarea { resize: vertical; min-height: 88px; }
+
+    /* 添付ファイルのinputは、実サイトでもこのように独自UIで隠されていることが多い。
+       Playwrightの set_input_files() は非表示のinputにもファイルを渡せるため、
+       この状態でも自動化できる。 */
+    .file-area {
+      border: 2px dashed #cbd5e1; border-radius: 6px; padding: 18px;
+      text-align: center; background: #f8fafc;
+    }
+    .file-area input[type=file] { display: none; }
+    .file-btn {
+      display: inline-block; padding: 8px 18px; background: #14532d; color: #fff;
+      border-radius: 4px; font-size: 13px; cursor: pointer;
+    }
+    #file-name { display: block; margin-top: 10px; font-size: 12px; color: #64748b; }
+    .actions { margin-top: 26px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+    button[type=submit] {
+      background: #14532d; color: #fff; border: none; padding: 12px 36px;
+      font-size: 15px; font-weight: 600; border-radius: 4px; cursor: pointer;
+      font-family: inherit;
+    }
+    button[type=submit]:hover { background: #166534; }
+    button[type=submit]:disabled { background: #94a3b8; cursor: not-allowed; }
+    .hint { font-size: 11px; color: #94a3b8; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>書類申請システム</h1>
+    <span class="badge">DUMMY / 動作確認用</span>
+  </header>
+
+  <div class="wrap">
+    <div class="card">
+      <h2>申請フォーム</h2>
+
+      <!-- multipart/form-data で /submit にPOSTする。
+           サーバー(server.py)側が受信内容を検証し、結果ページを返す。
+           クライアント側で完結させず実際にPOSTすることで、
+           添付ファイルの中身が本当に送信されているかまで確認できる。 -->
+      <form id="apply-form" action="/submit" method="POST" enctype="multipart/form-data">
+
+        <!-- 各要素のid は config.py の FormSelectors と1対1で対応している -->
+        <div class="field">
+          <label for="applicant-name">氏名<span class="req">必須</span></label>
+          <input type="text" id="applicant-name" name="applicant_name" required
+                 placeholder="山田 太郎">
+        </div>
+
+        <div class="field">
+          <label for="apply-date">申請日<span class="req">必須</span></label>
+          <input type="date" id="apply-date" name="apply_date" required>
+        </div>
+
+        <div class="field">
+          <label for="department">部署<span class="req">必須</span></label>
+          <!-- 実サイトでも value属性 と表示ラベルが異なることが多いため、
+               その状況を再現している。form_filler._select_option() が
+               value / label のどちらでも選択できることの確認になる。 -->
+          <select id="department" name="department" required>
+            <option value="">選択してください</option>
+            <option value="dev">開発部</option>
+            <option value="sales">営業部</option>
+            <option value="hr">人事部</option>
+            <option value="ga">総務部</option>
+            <option value="acc">経理部</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="doc-title">書類名<span class="req">必須</span></label>
+          <input type="text" id="doc-title" name="doc_title" required
+                 placeholder="業務委託契約書">
+        </div>
+
+        <div class="field">
+          <label for="reason">申請理由</label>
+          <textarea id="reason" name="reason" placeholder="申請の理由をご記入ください"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="attachment">添付ファイル</label>
+          <div class="file-area">
+            <input type="file" id="attachment" name="attachment">
+            <label for="attachment" class="file-btn">ファイルを選択</label>
+            <span id="file-name">選択されていません</span>
+          </div>
+          <p class="hint">※ このinputは display:none で隠されています（実サイトでよくある構造の再現）</p>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="submit-button">申請する</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 選択されたファイル名を表示するだけの処理。
+    // set_input_files() は本物のchangeイベントを発火させるので、
+    // 自動化した場合もこの表示は更新される（＝添付できたことが目視できる）。
+    const fileInput = document.getElementById('attachment');
+    const fileName = document.getElementById('file-name');
+    fileInput.addEventListener('change', () => {
+      const f = fileInput.files[0];
+      fileName.textContent = f
+        ? `${f.name} (${f.size.toLocaleString()} バイト)`
+        : '選択されていません';
+    });
+
+    // 実サイトでよくある「二重送信防止」の再現。
+    // 送信ボタンを押した直後にボタンが無効化されるため、
+    // 自動化側は「押した後の画面遷移」で成否を判定する必要がある。
+    document.getElementById('apply-form').addEventListener('submit', () => {
+      const btn = document.getElementById('submit-button');
+      btn.disabled = true;
+      btn.textContent = '送信中...';
+    });
+  </script>
+</body>
+</html>
